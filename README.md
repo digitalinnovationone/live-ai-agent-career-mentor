@@ -12,6 +12,8 @@ Repositório da live **"Crie um Agente de IA para Ser Seu Mentor de Carreira em 
 
 > Em cada link acima você encontra as instruções de instalação para o seu sistema operacional (Windows, macOS ou Linux).
 
+> Todo o código gerado durante a live está disponível neste repositório pra você consultar depois.
+
 ---
 
 ## 1. Entendendo Agentes de IA
@@ -40,27 +42,21 @@ Hoje vimos isso acontecer duas vezes:
 
 O [OpenCode](https://opencode.ai) é um agente de IA open source para codificação. Ele entende o contexto do seu projeto, cria e edita arquivos, e executa comandos. Pense nele como um desenvolvedor que trabalha pra você.
 
-O OpenCode oferece alguns **modelos gratuitos por tempo limitado**, o que é ótimo pra quem quer experimentar sem gastar nada. Basta abrir o OpenCode, rodar `/connect` e selecionar um dos modelos disponíveis.
+O OpenCode oferece alguns **modelos gratuitos por tempo limitado**, o que é ótimo pra quem quer experimentar sem gastar nada. Basta abrir o OpenCode e rodar `/models` para ver as opções disponíveis.
 
 ### Ollama (IA rodando 100% local)
 
 O [Ollama](https://ollama.com) permite rodar modelos de IA direto na sua máquina. Sem internet, sem conta, sem cartão de crédito. É mais lento que um modelo na nuvem (especialmente sem GPU), mas o custo é zero pra sempre.
 
-Depois de instalar, baixe um modelo:
+Depois de instalar o app, basta buscar e baixar um modelo. Na live usamos o `qwen3:4b`, que é leve e funciona bem mesmo em computadores mais modestos.
 
-```bash
-ollama pull qwen3:8b
-```
-
-Para conectar o OpenCode ao Ollama, o próprio Ollama faz a configuração automaticamente:
+Para conectar o OpenCode ao Ollama, o próprio Ollama faz a configuração automaticamente. No app do Ollama, basta buscar por **OpenCode** nas integrações. Pelo terminal, o comando é:
 
 ```bash
 ollama launch opencode
 ```
 
 Depois é só abrir o OpenCode, rodar `/models` e selecionar o modelo local.
-
-> **Dica:** o Ollama usa por padrão uma janela de contexto de 4K tokens. Para aumentar (recomendado), rode `ollama run qwen3:8b`, depois `/set parameter num_ctx 16384` e `/save qwen3:8b`.
 
 ---
 
@@ -126,7 +122,7 @@ Essa clareza é proposital. O CrewAI foi pensado pra que a estrutura de um agent
 ### Executando o agente
 
 ```bash
-# Certifique-se de que o Ollama está rodando (se for usar local)
+# Se estiver usando o Ollama via terminal (o app já faz isso automaticamente)
 ollama serve
 
 # Instalar dependências e rodar
