@@ -77,19 +77,19 @@ Quando mencionamos essas escolhas no prompt, não estamos exigindo conhecimento 
 Dentro do OpenCode, descrevemos o que queremos:
 
 ```
-Crie um agente de IA com Python e o framework CrewAI que funcione como
-um mentor de carreira em tecnologia.
+Crie um agente de IA com Python e o framework CrewAI que funcione como um mentor de carreira em tecnologia.
 
-Esse agente precisa conseguir acessar a página https://www.dio.me/#careers
-para conhecer as carreiras disponíveis na plataforma DIO e, com base nessas
-informações, orientar alunos que estão começando ou migrando para a área
-de tecnologia.
+Esse agente precisa acessar a página https://www.dio.me/#careers para conhecer as carreiras disponíveis na plataforma DIO e,
+com base nessas informações, orientar alunos que estão começando ou migrando para a área de tecnologia.
 
-O agente deve rodar usando o Ollama como modelo de IA local (sem precisar
-de chave de API).
-
-Gere um arquivo agent.py pronto para executar e um requirements.txt com
-as dependências necessárias.
+Regras:
+- Use uma ferramenta nativa do CrewAI para acessar a página da DIO
+- O código deve ser SUPER simples e didático (não exagere em comentários e/ou prompts)
+- Todos os atributos do agente, bem como comentários importantes, devem estar em português do Brasil
+- O agente deve rodar usando o Ollama como LLM local (modelo qwen3:8b)
+- Gere APENAS dois arquivos: agent.py e requirements.txt
+- Use o mínimo de dependências possível e sempre as mais recentes
+- Não modifique nenhum outro arquivo do repositório
 ```
 
 ### Resultado: modelo gratuito (nuvem)
