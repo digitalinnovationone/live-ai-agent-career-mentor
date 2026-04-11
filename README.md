@@ -12,7 +12,7 @@ Repositório da live **"Crie um Agente de IA para Ser Seu Mentor de Carreira em 
 
 > Em cada link acima você encontra as instruções de instalação para o seu sistema operacional (Windows, macOS ou Linux).
 
-> Todo o código gerado durante a live está disponível neste repositório pra você consultar depois.
+> Todo o código gerado durante a live está disponível neste repositório. Os arquivos `agent.py` e `requirements.txt` já estão prontos pra você baixar e experimentar.
 
 ---
 
@@ -44,11 +44,9 @@ O [OpenCode](https://opencode.ai) é um agente de IA open source para codificaç
 
 O OpenCode oferece alguns **modelos gratuitos por tempo limitado**, o que é ótimo pra quem quer experimentar sem gastar nada. Basta abrir o OpenCode e rodar `/models` para ver as opções disponíveis.
 
-### Ollama (IA rodando 100% local)
+### Ollama (IA local ou na nuvem, sem custo)
 
-O [Ollama](https://ollama.com) permite rodar modelos de IA direto na sua máquina. Sem internet, sem conta, sem cartão de crédito. É mais lento que um modelo na nuvem (especialmente sem GPU), mas o custo é zero pra sempre.
-
-Depois de instalar o app, basta buscar e baixar um modelo. Na live usamos o `qwen3:4b`, que é leve e funciona bem mesmo em computadores mais modestos.
+O [Ollama](https://ollama.com) permite rodar modelos de IA direto na sua máquina ou usar modelos gratuitos na nuvem. Na live usamos o `glm-5:cloud` (gratuito no Ollama Cloud) por ser mais rápido, mas se você tiver uma máquina com GPU ou não se importar com um tempo de resposta maior, modelos locais como o `qwen3:8b` funcionam bem pra experimentar no seu ritmo em casa.
 
 Para conectar o OpenCode ao Ollama, o próprio Ollama faz a configuração automaticamente. No app do Ollama, basta buscar por **OpenCode** nas integrações. Pelo terminal, o comando é:
 
@@ -56,68 +54,66 @@ Para conectar o OpenCode ao Ollama, o próprio Ollama faz a configuração autom
 ollama launch opencode
 ```
 
-Depois é só abrir o OpenCode, rodar `/models` e selecionar o modelo local.
+Depois é só abrir o OpenCode, rodar `/models` e selecionar o modelo.
 
 ---
 
 ## 3. Construindo o Agente Mentor (com OpenCode)
 
-Aqui começa a parte mais interessante. Em vez de escrever código manualmente, descrevemos o que queremos pro OpenCode e deixamos ele trabalhar. Esse é o poder de usar um agente como intermediário: ele desbloqueia a barreira técnica e permite que qualquer pessoa curiosa consiga transformar uma ideia em algo funcional.
+Em vez de escrever código do zero, já deixamos a estrutura do agente pronta no arquivo `agent.py`. O que falta preencher são justamente as partes mais importantes: a identidade do agente e a tarefa que ele vai executar. E quem vai preencher isso pra gente é o OpenCode.
 
 ### Por que CrewAI? Por que Python?
 
-Existem várias formas de criar agentes de IA, mas o **CrewAI** se destaca por ser intuitivo. Ele organiza cada agente como se fosse uma pessoa de verdade: com um papel, um objetivo, uma história e ferramentas que pode usar. Isso torna o código gerado fácil de entender, mesmo pra quem nunca programou.
+Existem várias formas de criar agentes de IA, mas o **CrewAI** se destaca por ser intuitivo. Ele organiza cada agente como se fosse uma pessoa de verdade: com um papel, um objetivo, uma história e ferramentas que pode usar. Isso torna o código fácil de entender, mesmo pra quem nunca programou.
 
 E o **Python** é a linguagem mais usada no mundo da IA, então praticamente tudo que você encontrar sobre o tema vai estar nessa linguagem. É o caminho natural.
 
-Quando mencionamos essas escolhas no prompt, não estamos exigindo conhecimento técnico de quem está assistindo. Estamos sendo específicos com o agente (OpenCode) pra que ele gere o melhor resultado possível. É como pedir um prato num restaurante: quanto mais detalhes você dá, melhor sai.
+### A estrutura do agente
 
-### O prompt
+O arquivo `agent.py` já tem toda a parte técnica configurada (LLM, ferramenta, execução). O que deixamos em aberto são os campos que definem *quem* o agente é:
 
-Dentro do OpenCode, descrevemos o que queremos:
+```python
+mentor = Agent(
+    role="",       # Qual o papel desse agente?
+    goal="",       # Qual o objetivo principal dele?
+    backstory="",  # Qual a história por trás dele?
+    tools=[ferramenta_dio],
+    llm=llm,
+    verbose=True
+)
 
-```
-Crie um agente de IA com Python e o framework CrewAI que funcione como um mentor de carreira em tecnologia.
-
-Esse agente precisa acessar a página https://www.dio.me/#careers para conhecer as carreiras disponíveis na plataforma DIO e,
-com base nessas informações, orientar alunos que estão começando ou migrando para a área de tecnologia.
-
-Regras:
-- Use uma ferramenta nativa do CrewAI para acessar a página da DIO
-- O código deve ser SUPER simples e didático (não exagere em comentários e/ou prompts)
-- Todos os atributos do agente, bem como comentários importantes, devem estar em português do Brasil
-- O agente deve rodar usando o Ollama como LLM local (modelo qwen3:8b)
-- Gere APENAS dois arquivos: agent.py e requirements.txt
-- Use o mínimo de dependências possível e sempre as mais recentes
-- Não modifique nenhum outro arquivo do repositório
-```
-
-### Resultado: modelo gratuito (nuvem)
-
-> _Espaço reservado para o resultado gerado durante a live usando um modelo gratuito do OpenCode._
-
-```
-TODO: colar aqui o output do OpenCode usando modelo gratuito
+tarefa = Task(
+    description="",       # O que o agente deve fazer?
+    expected_output="",   # O que esperamos como resultado?
+    agent=mentor
+)
 ```
 
-### Resultado: modelo local (Ollama)
-
-> _Espaço reservado para o resultado gerado durante a live usando o Ollama localmente._
-
-```
-TODO: colar aqui o output do OpenCode usando Ollama
-```
-
-### Entendendo o código gerado
-
-Independente do modelo usado, o código gerado pelo OpenCode segue a estrutura do CrewAI. Mesmo sem saber programar, dá pra entender o que está acontecendo:
+Esses campos são o coração de qualquer agente no CrewAI:
 
 - **role** = qual o papel do agente (ex: "Mentor de Carreira em Tecnologia")
 - **goal** = o que ele busca alcançar
 - **backstory** = o contexto que guia suas respostas
-- **tools** = o que ele pode acessar (nesse caso, o site da DIO)
+- **description** = o que ele deve fazer nesta tarefa
+- **expected_output** = o que esperamos como resultado
 
-Essa clareza é proposital. O CrewAI foi pensado pra que a estrutura de um agente faça sentido até pra quem não programa.
+### Preenchendo com OpenCode
+
+Dentro do OpenCode (usando um modelo gratuito pra ter mais agilidade), pedimos pra ele preencher os TODOs:
+
+```
+Preencha os campos vazios (role, goal, backstory, description e
+expected_output) do arquivo agent.py.
+
+O agente deve atuar como um mentor de carreira em tecnologia, orientando
+alunos que estão começando ou migrando para a área de tecnologia com
+base nas carreiras disponíveis na DIO (dio.me).
+
+Mantenha os textos em português do Brasil, simples e diretos.
+Não altere nada além dos campos vazios.
+```
+
+> Os resultados da live estão registrados em [`RESULT.md`](RESULT.md).
 
 ### Executando o agente
 
